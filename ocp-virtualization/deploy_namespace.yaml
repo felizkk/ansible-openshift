@@ -1,0 +1,16 @@
+---
+- name: Test AAP to OCP Playbook
+  hosts: localhost
+
+  vars:
+    namespace_name: foobar
+
+  tasks:
+    - name: Create a NameSpace
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          kind: Project
+          apiVersion: project.openshift.io/v1
+          metadata:
+            name: "{{ namespace_name }}"

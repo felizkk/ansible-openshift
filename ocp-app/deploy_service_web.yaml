@@ -1,5 +1,11 @@
+---
 - name: Test AAP to OCP Playbook
   hosts: localhost
+
+  vars:
+    namespace_name: foobar
+    service_name: web
+    app_name: galaxy
 
   tasks:
     - name: Create a Service object from an inline definition
@@ -9,15 +15,15 @@
           apiVersion: v1
           kind: Service
           metadata:
-            name: web
-            namespace: ansible-testing
+            name: "{{ service_name }}"
+            namespace: "{{ namespace_name }}"
             labels:
-              app: galaxy
-              service: web
+              app: "{{ app_name }}"
+              service: "{{ service_name }}"
           spec:
             selector:
-              app: galaxy
-              service: web
+              app: "{{ app_name }}"
+              service: "{{ service_name }}"
             ports:
               - protocol: TCP
                 targetPort: 8000
