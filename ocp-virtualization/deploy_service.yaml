@@ -1,5 +1,5 @@
 - name: Test AAP to OCP Playbook
-  hosts: all
+  hosts: localhost
 
   tasks:
     - name: Create a Service object from an inline definition
