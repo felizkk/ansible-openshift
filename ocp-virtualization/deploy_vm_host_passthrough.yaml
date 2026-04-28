@@ -26,7 +26,9 @@
             namespace: "{{ namespace_name }}"
           spec:
             dataVolumeTemplates:
-              - spec:
+              - metadata:
+                  name: "{{ vm_name }}-volume"
+                spec:
                   sourceRef:
                     kind: DataSource
                     name: "{{ datasource_name }}"
@@ -64,7 +66,9 @@
                   node-role.kubernetes.io/worker: ''
                 subdomain: headless
                 volumes:
-                  - name: rootdisk
+                  - dataVolume:
+                      name: "{{ vm_name }}-volume"
+                    name: rootdisk
                   - cloudInitNoCloud:
                       userData: |
                         #cloud-config
