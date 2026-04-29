@@ -1,0 +1,21 @@
+---
+- name: Test AAP to OCP Playbook
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    vm_group_name_list:
+      - vm-admin-group
+      - vm-editor-group
+
+  tasks:
+    - name: Create VM User Groups
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          kind: Group
+          apiVersion: user.openshift.io/v1
+          metadata:
+            name: "{{ item }}"
+          users: null
+      loop: "{{ vm_group_name_list }}"

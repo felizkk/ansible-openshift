@@ -1,0 +1,29 @@
+---
+- name: Test AAP to OCP Playbook
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    role_name: vm-editor-role
+    roleref_name: kubevirt.io:edit
+    namespace_name: vm-test-project-1
+    user_group_name: vm-editor-group
+  
+  tasks:
+    - name: Create Role Binding
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          kind: RoleBinding
+          apiVersion: rbac.authorization.k8s.io/v1
+          metadata:
+            name: "{{ role_name }}"
+            namespace: "{{ namespace_name }}"
+          subjects:
+            - kind: Group
+              apiGroup: rbac.authorization.k8s.io
+              name: "{{ user_group_name }}"
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: "{{ roleref_name }}"
