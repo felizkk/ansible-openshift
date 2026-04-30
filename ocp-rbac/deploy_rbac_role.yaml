@@ -45,3 +45,21 @@
             apiGroup: rbac.authorization.k8s.io
             kind: ClusterRole
             name: view
+
+    - name: Create RoleBinding for os images view
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+          metadata:
+            name: "{{ role_name }}-{{ namespace_name }}-os-images-view"
+            namespace: openshift-virtualization-os-images
+          subjects:
+            - kind: Group
+              apiGroup: rbac.authorization.k8s.io
+              name: "{{ user_group_name }}"
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: view
