@@ -55,6 +55,8 @@ registry.redhat.io/ansible-automation-platform-25/ee-supported-rhel9:latest
 | ocp-rbac/rbac_user_group.yaml | Create User Groups from a list |
 | ocp-virtualization/deploy_namespace.yaml | New Namespace Configuration |
 | ocp-virtualization/deploy_vm_host_passthrough | Create a VM with host-passthrough CPU |
+| ocp-virtualization/deploy_cudn_static.yaml | Create hardcoded CUDN |
+| ocp-virtualization/deploy_nncp_static.yaml | Create hardcoded NNCP |
 
 Example Job Template Survey for VM Deployment
 
