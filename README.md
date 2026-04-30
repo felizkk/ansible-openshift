@@ -70,3 +70,40 @@ Simple workflow setup:
 4. Create VM to test deployment
 
 ![Project Setup](images/project_setup_workflow.png)
+
+## AAP Operator Deployment ##
+
+This is a simple AAP 2.6 Custom Resource for AAP deployment using OpenShift Operator.
+
+```yaml
+---
+apiVersion: aap.ansible.com/v1alpha1
+kind: AnsibleAutomationPlatform
+metadata:
+  name: aap
+  namespace: aap
+spec:
+  # Platform
+  image_pull_policy: IfNotPresent
+
+  database:
+    resource_requirements:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+    storage_requirements:
+      requests:
+        storage: 100Gi
+
+  controller:
+    disabled: false
+
+  eda:
+    disabled: false
+
+  hub:
+    disabled: false
+    storage_type: file
+    file_storage_storage_class: rwx-file-storage-name
+    file_storage_size: 100Gi
+```
