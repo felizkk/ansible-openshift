@@ -55,14 +55,21 @@
                       - bootOrder: 1
                         name: rootdisk
                     interfaces:
-                      - masquerade: {}
-                        name: default
+                      - name: default
+                        masquerade: {}
+                      - name: nic-160
+                        model: virtio
+                        bridge: {}
+                        state: up
                   machine:
                     type: "{{ vm_machine_type }}"
                   resources: {}
                 networks:
                   - name: default
                     pod: {}
+                  - name: nic-160
+                    multus:
+                      networkName: localnet-160-cudn
                 nodeSelector:
                   node-role.kubernetes.io/worker: ''
                 subdomain: headless
