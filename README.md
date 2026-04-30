@@ -50,8 +50,8 @@ registry.redhat.io/ansible-automation-platform-25/ee-supported-rhel9:latest
 | File Name | Purpose |
 |--|--|
 | ocp-app/deploy_service_web.yaml | Create Service for Web (TCP/8080) |
-| ocp-rbac/rbac_role_static.yaml | Create 2 hardcoded RoleBinding |
-| ocp-rbac/rbac_role.yaml | Create RoleBinding |
+| ocp-rbac/rbac_role_static.yaml | Create hardcoded RoleBindings |
+| ocp-rbac/rbac_role_vm_(admin/editor).yaml | Create RoleBinding for VM Admin / Editor |
 | ocp-rbac/rbac_user_group.yaml | Create User Groups from a list |
 | ocp-virtualization/deploy_namespace.yaml | New Namespace Configuration |
 | ocp-virtualization/deploy_vm_host_passthrough | Create a VM with host-passthrough CPU |
