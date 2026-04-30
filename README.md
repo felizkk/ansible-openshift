@@ -107,3 +107,44 @@ spec:
     file_storage_storage_class: rwx-file-storage-name
     file_storage_size: 100Gi
 ```
+
+## OpenShift Bearer Token for AAP ##
+
+Instead of refreshing human user login token every time and update AAP Credential, it is recommended to create a service account bearear token that will live for 1 year (31536000 seconds).
+
+```bash
+# Create Service account on the AAP namespace
+$ oc project aap
+$ oc create serviceaccount aap-admin
+serviceaccount/aap-admin created
+
+# Assign cluster-admin role
+$ oc adm policy add-cluster-role-to-user cluster-admin \
+  system:serviceaccount:aap:aap-admin
+clusterrole.rbac.authorization.k8s.io/cluster-admin added: "system:serviceaccount:aap:aap-admin"
+
+# Create 1 year token
+$ cat <<EOF | oc apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aap-admin-token
+  namespace: aap
+  annotations:
+    kubernetes.io/service-account.name: aap-admin
+    kubernetes.io/token-expiration-seconds: "31536000"
+type: kubernetes.io/service-account-token
+EOF
+secret/aap-admin-token created
+
+# Retreive token
+$ oc get secret aap-admin-token \
+  -o jsonpath='{.data.token}' | base64 -d
+eyJhbGc...truncated...xKnMVE_9Y
+
+# Verify token
+$ TOKEN=$(oc get secret aap-admin-token \
+  -o jsonpath='{.data.token}' | base64 -d)
+$ oc whoami --token=$TOKEN
+system:serviceaccount:aap:aap-admin
+```
