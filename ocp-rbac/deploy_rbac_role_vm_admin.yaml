@@ -49,25 +49,26 @@
             name: cdi.kubevirt.io:admin
 
     # Admin control over OS Image Templates resources on Namespace. 
-    - name: Create RoleBinding for Templates API - Admin
-      redhat.openshift.k8s:
-        state: present
-        definition:
-          kind: RoleBinding
-          apiVersion: rbac.authorization.k8s.io/v1
-          metadata:
-            name: "{{ role_name }}-template-admin"
-            namespace: "{{ namespace_name }}"
-          subjects:
-            - kind: Group
-              apiGroup: rbac.authorization.k8s.io
-              name: "{{ user_group_name }}"
-          roleRef:
-            apiGroup: rbac.authorization.k8s.io
-            kind: ClusterRole
-            name: template.openshift.io:admin
+    # - name: Create RoleBinding for Templates API - Admin
+    #   redhat.openshift.k8s:
+    #     state: present
+    #     definition:
+    #       kind: RoleBinding
+    #       apiVersion: rbac.authorization.k8s.io/v1
+    #       metadata:
+    #         name: "{{ role_name }}-template-admin"
+    #         namespace: "{{ namespace_name }}"
+    #       subjects:
+    #         - kind: Group
+    #           apiGroup: rbac.authorization.k8s.io
+    #           name: "{{ user_group_name }}"
+    #       roleRef:
+    #         apiGroup: rbac.authorization.k8s.io
+    #         kind: ClusterRole
+    #         name: template.openshift.io:admin
 
-    # Allows viewing of Project resources (Not Admin)
+    # Allows admin of Project resources
+    # Just view is not enough. It will not allow processedTemplate for VM Creation
     - name: Create RoleBinding for Project Namespace - View
       redhat.openshift.k8s:
         state: present
@@ -105,21 +106,22 @@
             kind: ClusterRole
             name: view
 
-    # Allows get/list and create on processedtemplates
-    - name: Create RoleBinding for OS Images Template - View
-      redhat.openshift.k8s:
-        state: present
-        definition:
-          apiVersion: rbac.authorization.k8s.io/v1
-          kind: RoleBinding
-          metadata:
-            name: "{{ role_name }}-os-images-template-view"
-            namespace: openshift-virtualization-os-images
-          subjects:
-            - kind: Group
-              apiGroup: rbac.authorization.k8s.io
-              name: "{{ user_group_name }}"
-          roleRef:
-            apiGroup: rbac.authorization.k8s.io
-            kind: ClusterRole
-            name: template.openshift.io:view
+    # Allows get/list and on processedtemplates
+    # Not needed for VM Creation via Catalog Template
+    # - name: Create RoleBinding for OS Images Template - View
+    #   redhat.openshift.k8s:
+    #     state: present
+    #     definition:
+    #       apiVersion: rbac.authorization.k8s.io/v1
+    #       kind: RoleBinding
+    #       metadata:
+    #         name: "{{ role_name }}-os-images-template-view"
+    #         namespace: openshift-virtualization-os-images
+    #       subjects:
+    #         - kind: Group
+    #           apiGroup: rbac.authorization.k8s.io
+    #           name: "{{ user_group_name }}"
+    #       roleRef:
+    #         apiGroup: rbac.authorization.k8s.io
+    #         kind: ClusterRole
+    #         name: template.openshift.io:view
