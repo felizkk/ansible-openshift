@@ -7,6 +7,7 @@
     vm_group_name_list:
       - vm-admin-group
       - vm-editor-group
+      - vm-viewer-group
 
   tasks:
     - name: Create VM User Groups
