@@ -56,7 +56,17 @@ registry.redhat.io/ansible-automation-platform-25/ee-supported-rhel9:latest
 | ocp-virtualization/deploy_namespace.yaml | New Namespace Configuration |
 | ocp-virtualization/deploy_vm_host_passthrough | Create a VM with host-passthrough CPU |
 
+Example Job Template Survey for VM Deployment
+
+![VM Launch](images/vm_launch_prompt.png)
+
+
 ## Workflow Example ##
 
-TBD
+Simple workflow setup:
+1. Project Sync
+2. Create Namespace
+3. Create RoleBinding for the Namespace
+4. Create VM to test deployment
 
+![Project Setup](images/project_setup_workflow.png)
