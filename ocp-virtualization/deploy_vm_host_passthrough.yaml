@@ -2,7 +2,7 @@
 - name: Test AAP to OCP Playbook
   hosts: localhost
   gather_facts: false
-  
+
   vars:
     namespace_name: foobar
     vm_name: my-vm-one
@@ -41,7 +41,7 @@
                     storageClassName: "{{ storageclass_name }}"
             instancetype:
               kind: VirtualMachineClusterInstancetype
-              name: u1.small
+              name: "{{ vm_instance_type }}"
             runStrategy: Halted
             template:
               spec:
