@@ -1,0 +1,35 @@
+---
+- name: Test AAP to OCP Playbook
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create a secondary network bridge
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          apiVersion: k8s.ovn.org/v1
+          kind: ClusterUserDefinedNetwork
+          metadata:
+            annotations:
+              description: Create a virtual network for subnet 160 with VLAN 100
+            name: localnet-160-cudn
+          spec:
+            namespaceSelector:
+              matchExpressions:
+                - key: kubernetes.io/metadata.name
+                  operator: In
+                  values:
+                    - vm-test-project-1
+            network:
+              localnet:
+                ipam:
+                  mode: Disabled
+                mtu: 1500
+                physicalNetworkName: localnet-160
+                role: Secondary
+                vlan:
+                  access:
+                    id: 100
+                  mode: Access
+              topology: Localnet
