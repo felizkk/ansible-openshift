@@ -1,0 +1,144 @@
+---
+- name: Test AAP to OCP Playbook
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    role_name: vm-editor-group
+    namespace_name: vm-test-project-1
+    user_group_name: vm-editor-group
+  
+  tasks:
+    # Allows edit of Project resources
+    # Just view is not enough. It will not allow processedTemplate for VM Creation
+    - name: Create RoleBinding for Project Namespace - Edit
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+          metadata:
+            name: "{{ role_name }}-project-edit"
+            namespace: "{{ namespace_name }}"
+          subjects:
+            - kind: Group
+              apiGroup: rbac.authorization.k8s.io
+              name: "{{ user_group_name }}"
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: edit
+
+    # Allows View of Project resources
+    # Just view is not enough. It will not allow processedTemplate for VM Creation
+    # - name: Create RoleBinding for Project Namespace - View
+    #   redhat.openshift.k8s:
+    #     state: present
+    #     definition:
+    #       apiVersion: rbac.authorization.k8s.io/v1
+    #       kind: RoleBinding
+    #       metadata:
+    #         name: "{{ role_name }}-project-view"
+    #         namespace: "{{ namespace_name }}"
+    #       subjects:
+    #         - kind: Group
+    #           apiGroup: rbac.authorization.k8s.io
+    #           name: "{{ user_group_name }}"
+    #       roleRef:
+    #         apiGroup: rbac.authorization.k8s.io
+    #         kind: ClusterRole
+    #         name: view
+
+    # Allows Editing a VM
+    # - name: Create RoleBinding for KubeVirt.io API - Edit
+    #   redhat.openshift.k8s:
+    #     state: present
+    #     definition:
+    #       kind: RoleBinding
+    #       apiVersion: rbac.authorization.k8s.io/v1
+    #       metadata:
+    #         name: "{{ role_name }}-kubevirtio-edit"
+    #         namespace: "{{ namespace_name }}"
+    #       subjects:
+    #         - kind: Group
+    #           apiGroup: rbac.authorization.k8s.io
+    #           name: "{{ user_group_name }}"
+    #       roleRef:
+    #         apiGroup: rbac.authorization.k8s.io
+    #         kind: ClusterRole
+    #         name: kubevirt.io:edit
+
+    # Edit control over CDI resources on Namespace. 
+    # Manage DataVolumes, DataSources, and DataImportCrons for VM disk lifecycle — cloning, importing, uploading images.
+    # - name: Create RoleBinding for CDI KubeVirt.io API - Edit
+    #   redhat.openshift.k8s:
+    #     state: present
+    #     definition:
+    #       kind: RoleBinding
+    #       apiVersion: rbac.authorization.k8s.io/v1
+    #       metadata:
+    #         name: "{{ role_name }}-cdi-kubevirtio-edit"
+    #         namespace: "{{ namespace_name }}"
+    #       subjects:
+    #         - kind: Group
+    #           apiGroup: rbac.authorization.k8s.io
+    #           name: "{{ user_group_name }}"
+    #       roleRef:
+    #         apiGroup: rbac.authorization.k8s.io
+    #         kind: ClusterRole
+    #         name: cdi.kubevirt.io:edit
+
+    # Allows listing DataSources / PVCs (boot sources) in that namespace
+    - name: Create RoleBinding for OS Images - View
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+          metadata:
+            name: "{{ role_name }}-os-images-view"
+            namespace: openshift-virtualization-os-images
+          subjects:
+            - kind: Group
+              apiGroup: rbac.authorization.k8s.io
+              name: "{{ user_group_name }}"
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: view
+
+    - name: Create RoleBinding for Monitoring Rules - View
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          kind: RoleBinding
+          apiVersion: rbac.authorization.k8s.io/v1
+          metadata:
+            name: "{{ role_name }}-monitoring-rules-view"
+            namespace: "{{ namespace_name }}"
+          subjects:
+            - kind: Group
+              apiGroup: rbac.authorization.k8s.io
+              name: "{{ user_group_name }}"
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: monitoring-rules-view
+
+    - name: Create RoleBinding for Monitoring - View
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          kind: RoleBinding
+          apiVersion: rbac.authorization.k8s.io/v1
+          metadata:
+            name: "{{ role_name }}-monitoring-view"
+            namespace: "{{ namespace_name }}"
+          subjects:
+            - kind: Group
+              apiGroup: rbac.authorization.k8s.io
+              name: "{{ user_group_name }}"
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: cluster-monitoring-view
