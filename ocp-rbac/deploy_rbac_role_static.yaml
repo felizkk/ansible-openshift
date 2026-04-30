@@ -5,7 +5,7 @@
   
   # These are not cluster role binding
   tasks:
-    - name: Create role vm-editor-role
+    - name: Create role vm-editor-role - edit VM
       redhat.openshift.k8s:
         state: present
         definition:
@@ -40,3 +40,24 @@
             apiGroup: rbac.authorization.k8s.io
             kind: ClusterRole
             name: "kubevirt.io:admin"
+
+    - name: Create role for namespace view
+      redhat.openshift.k8s:
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+          metadata:
+            name: vm-role-ns-view
+            namespace: vm-test-project-1
+          subjects:
+            - kind: Group
+              name: vm-admin-group
+              apiGroup: rbac.authorization.k8s.io
+            - kind: Group
+              name: vm-editor-group
+              apiGroup: rbac.authorization.k8s.io
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: view
